@@ -1,4 +1,6 @@
 # **AI Computer Vision Fundamentals: Image Classifier with PyTorch**
+![PyTorch](https://img.shields.io/badge/PyTorch-v1.13+-ee4c2c?logo=pytorch&logoColor=white)
+(Currently a work in progress)
 
 ## **Goal**  
 Learn the fundamentals of AI Computer Vision (CV) by building a **simple image classifier** using **PyTorch**. The project will cover key concepts such as loading and processing image data, building a neural network, training a model, and evaluating its performance.
@@ -40,12 +42,12 @@ The workflow includes:
 - **Programming Language:** Python  
 - **Framework:** PyTorch  
 - **Dataset Handling:** torchvision  
-- **Visualization:** Matplotlib, Seaborn  
-- **Notebook Environment:** Jupyter Notebook or Google Colab  
+- **Visualization:** Matplotlib*, Seaborn*  
+- **Notebook Environment:** Jupyter Notebook* or Google Colab*
 
 ---
 
-## **Project Workflow**  
+## **Proposed Project Workflow**  
 
 ### **1. Setup Environment**  
 - Install Python and PyTorch.  
