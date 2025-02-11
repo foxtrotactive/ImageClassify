@@ -1,5 +1,6 @@
 # **AI Computer Vision Fundamentals: Image Classifier with PyTorch**
 ![PyTorch](https://img.shields.io/badge/PyTorch-v1.13+-ee4c2c?logo=pytorch&logoColor=white)
+
 (Currently a work in progress)
 
 ## **Goal**  
