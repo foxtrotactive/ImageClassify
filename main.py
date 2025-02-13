@@ -1,34 +1,28 @@
+import os
 import torch
-from torch import nn, optim
-from torchvision import datasets, transforms, models
+import cv2
+import numpy as np
+from torch import nn, optim, Tensor
 from torch.utils.data import DataLoader
 
-# Define data directories
-data_dir = './data'
-train_dir = f'{data_dir}/train'
-test_dir = f'{data_dir}/test'
+# Configuration
+num_classes = 10    # Update this with the actual number of product categories
+img_size = 640
+batch_size = 32
+device = 'cuda' if torch.cuda.is_avalable() else 'cpu'
 
-# Define transforms with image normalization
-train_transform = transforms.Compose([
-    transforms.Lambda(lambda x: x.convert('RGB')),  # Ensure RGB format
-    transforms.Resize(256),
-    transforms.RandomResizedCrop(224),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
-
-test_transform = transforms.Compose([
-    transforms.Lambda(lambda x: x.convert('RGB')),
-    transforms.Resize(256),
-    transforms.CenterCrop(224),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
-
-# Load datasets
-train_dataset = datasets.ImageFolder(train_dir, transform=train_transform)
-test_dataset = datasets.ImageFolder(test_dir, transform=test_transform)
+# Custom YOLOv5 model with additional classification layers
+class RetailYOLO(nn.Module):
+    def __init__(self, base_model, num_classes):
+        super().__init__()
+        self.yolo = base_model
+        # Add custom classificatioin head
+        self.fc = nn.Sequential(
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Dropout(0,2),
+            nn.Linear(256, num_classes)
+                )
 
 # Create data loaders
 batch_size = 32
