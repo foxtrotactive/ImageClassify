@@ -5,33 +5,43 @@ import numpy as np
 from torch import nn, optim, Tensor
 from torch.utils.data import DataLoader
 
-# Configuration
-num_classes = 10    # Update this with the actual number of product categories
-img_size = 640
-batch_size = 32
-device = 'cuda' if torch.cuda.is_avalable() else 'cpu'
+# 1 Enviorment setup
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# Custom YOLOv5 model with additional classification layers
-class RetailYOLO(nn.Module):
-    def __init__(self, base_model, num_classes):
-        super().__init__()
-        self.yolo = base_model
-        # Add custom classificatioin head
-        self.fc = nn.Sequential(
-            nn.Linear(512, 256),
-            nn.ReLU(),
-            nn.Dropout(0,2),
-            nn.Linear(256, num_classes)
-                )
+# 2 Data preprossessing
+train_transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+test_transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+# load dataset
+dataset = datasets.ImageFolder(root='/path', transform=train_transform)
+
+#split dataset
+train_size = int(0.7 * len(dataset))
+val_size = int(0.15 * len(dataset))
+test_size = len(dataset) - train_size - val_size
+
+train_dataset, val_dataset, test_dataset = random_split(
+    dataset, [train_size, val_size, test_size]
+)
 
 # Create data loaders
-batch_size = 32
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-# Initialize model
-num_classes = len(train_dataset.classes)  # todo
-model = models.resnet18(pretrained=True)
+##REWRITING
 
 # Freeze parameters and replace final layer
 for param in model.parameters():
@@ -40,7 +50,6 @@ for param in model.parameters():
 model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 # Set device and move model
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(device)
 
 # Define loss and optimizer
