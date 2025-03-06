@@ -40,7 +40,7 @@ for param in model.parameters():
 model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 # Set device and move model
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(device)
 
 # Define loss and optimizer
