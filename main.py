@@ -54,10 +54,8 @@ for epoch in range(epochs):
     running_loss = 0.0
     correct = 0
     total = 0
-    
     for inputs, labels in train_loader:
         inputs, labels = inputs.to(device), labels.to(device)
-        
         optimizer.zero_grad()
         outputs = model(inputs)
         loss = criterion(outputs, labels)
@@ -68,7 +66,6 @@ for epoch in range(epochs):
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
-    
     epoch_loss = running_loss / len(train_dataset)
     epoch_acc = correct / total
     print(f'Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Acc: {epoch_acc:.4f}')
