@@ -3,7 +3,11 @@ import torch
 import cv2
 import numpy as np
 from torch import nn, optim, Tensor
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
+from torchvision import datasets, transformers, models
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
+
 
 # 1 Enviorment setup
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -41,16 +45,26 @@ train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-##REWRITING
+#3 Model Design with Dropout
 
-# Freeze parameters and replace final layer
+model = models.resnet18(pretrained=True)
+
+#Freeze base layers
 for param in model.parameters():
     param.requires_grad = False
 
-model.fc = nn.Linear(model.fc.in_features, num_classes)
+# Classification head with dropout
+model.fc = nn.Sequential(
+        nn.Linear(model.fc.in_features, 256),
+        nn.ReLU(),
+        nn.Dropout(0.2),
+        nn.Linear(256, len(dataset,classes))
+        )
 
-# Set device and move model
+#set device
 model = model.to(device)
+
+##REWRITING
 
 # Define loss and optimizer
 criterion = nn.CrossEntropyLoss()
