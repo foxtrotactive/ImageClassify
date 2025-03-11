@@ -47,7 +47,7 @@ test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 #3 Model Design with Dropout
 
-model = models.resnet18(pretrained=True)
+model = models.resnet18(pretrained=True) #torch vision library
 
 #Freeze base layers
 for param in model.parameters():
@@ -64,11 +64,54 @@ model.fc = nn.Sequential(
 #set device
 model = model.to(device)
 
-##REWRITING
+#4. Training with Validation
 
 # Define loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.fc.parameters(), lr=0.001)
+optimizer = optim.Adam(model.fc.parameters(), lr=0.001) #torch library
+
+# Track metrics
+train_losses = []
+val_losses = []
+train_acc = []
+val_acc = []
+
+epochs = 10
+
+for epoch in range(epochs):
+    #Training phase
+    model.train()
+    running_loss = 0.0
+    correct = 0
+    total = 0
+
+    for inputs, labels in train_loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item() * inputs.size(0)
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sim().item()
+
+    epoch_train_loss = tunning_loss / len(train_loader.dataset)
+    epoch_train_acc = correct / total
+    train_losses.append(epoch_train_loss)
+    train_acc.append(epoch_train_acc)
+
+    # todo: validation
+    # todo: print train loss and val loss per epoch
+
+
+
+
+##REWRITING
+
 
 # Training loop
 epochs = 5
