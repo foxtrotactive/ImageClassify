@@ -18,6 +18,9 @@ The workflow includes:
 4. **Evaluation:** Testing the model on unseen data.  
 5. **Visualization:** Displaying results, such as accuracy graphs or misclassified images.
 
+<img width="712" alt="image" src="https://github.com/user-attachments/assets/de1c3371-b326-4521-bbd0-daf8000dbb6c" />
+
+
 ---
 
 ## **Learning Objectives**  
