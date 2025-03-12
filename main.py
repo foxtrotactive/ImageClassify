@@ -104,48 +104,33 @@ for epoch in range(epochs):
     train_losses.append(epoch_train_loss)
     train_acc.append(epoch_train_acc)
 
-    # todo: validation
-    # todo: print train loss and val loss per epoch
+    #Validation phase
+    model.eval()
+    val_running_loss = 0.0
+    val_correct = 0
+    val_total = 0
+
+    with torch.no_grad():
+        for inputs, labels in val_loader:
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+
+            val_running_loss += loss.item() * inputs.size(0)
+            _, predicted = torch.max(outputs.data, 1)
+            val_total += labels.size(0)
+            val_correct += (predicted == labels).sum().item()
+
+   epoch_val_loss = val_running_loss / len(val_loader.dataset) 
+   epoch_val_acc = val_correct . val_total
+   val_losses.append(epoch_val_loss)
+   val_acc.append(epoch_val_acc)
+
+   print(f'Epoch {epoch+1}/{epochs}')
+   print(f'Train Loss: {epoch_train_loss:.4f} Acc: {epoch_train_acc:.4f}')
+   print(f'Val Loss: {epoch_val_loss:.4f} Acc: {epoch_val_acc:.4f}\n')
 
 
+#todo: evaluation
 
-
-##REWRITING
-
-
-# Training loop
-epochs = 5
-for epoch in range(epochs):
-    model.train()
-    running_loss = 0.0
-    correct = 0
-    total = 0
-    for inputs, labels in train_loader:
-        inputs, labels = inputs.to(device), labels.to(device)
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-        
-        running_loss += loss.item() * inputs.size(0)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-    epoch_loss = running_loss / len(train_dataset)
-    epoch_acc = correct / total
-    print(f'Epoch {epoch+1}/{epochs} - Loss: {epoch_loss:.4f}, Acc: {epoch_acc:.4f}')
-
-# Evaluation
-model.eval()
-correct = 0
-total = 0
-with torch.no_grad():
-    for inputs, labels in test_loader:
-        inputs, labels = inputs.to(device), labels.to(device)
-        outputs = model(inputs)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-print(f'Test Accuracy: {correct/total:.4f}')
+#todo: results visualization
