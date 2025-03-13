@@ -130,7 +130,30 @@ for epoch in range(epochs):
    print(f'Train Loss: {epoch_train_loss:.4f} Acc: {epoch_train_acc:.4f}')
    print(f'Val Loss: {epoch_val_loss:.4f} Acc: {epoch_val_acc:.4f}\n')
 
+# 5 Evaluation
 
-#todo: evaluation
+model.eval()
+all_preds = []
+all_labels = []
+
+with torch.no_grad():
+    for inputs, labels in test_loader:
+        inputs, labels = inputs.to(device), labels.to(device)
+
+# Generate confusion matrix
+
+# Make classification report
+
+# 6 Results visualization 
+# Loss curve
+plt.figure(figsize=())
+plt.subplot(1, 2, 1)
+plt.plot(train_losses, label='Train Loss')
+plt.plot(val_losses, label='Val Loss')
+plt.title('Training and Validatioin Loss')
+plt.legend()
+
+#Accuracy curve
+
 
 #todo: results visualization
