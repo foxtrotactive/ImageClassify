@@ -146,7 +146,7 @@ with torch.no_grad():
 
 # 6 Results visualization 
 # Loss curve
-plt.figure(figsize=())
+plt.figure(figsize=(12, 5))
 plt.subplot(1, 2, 1)
 plt.plot(train_losses, label='Train Loss')
 plt.plot(val_losses, label='Val Loss')
@@ -154,6 +154,13 @@ plt.title('Training and Validatioin Loss')
 plt.legend()
 
 #Accuracy curve
-
+plt.subplot(1,2,2)
+plt.plot(train_acc, label='Train Acc')
+plt.plot(val_acc, label='Val Acc')
+plt.title('Training and Validation Accuracy')
+plt.legend()
+plt.show()
 
 #todo: results visualization
+
+#todo: get sample predictions and plot images
