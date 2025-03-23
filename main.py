@@ -173,4 +173,10 @@ def imshow(inp, title=None):
         plt.title(title)
     plt.pause(0.001)
 
-#todo: get sample predictions and plot images
+# Get sample predictions
+model.eval()
+images, labels = next(iter(test_loader))
+outputs = model(images.to(device))
+_, preds = torch.max(outputs, 1)
+
+#todo: plot sample images
